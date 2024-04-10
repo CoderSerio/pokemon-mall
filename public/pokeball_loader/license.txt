@@ -1,0 +1,11 @@
+Model Information:
+* title:	Pokeball Loader
+* source:	https://sketchfab.com/3d-models/pokeball-loader-0066d4c4e8a0487592c785c4688b2e71
+* author:	anoopjadhav (https://sketchfab.com/anoopjadhav)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Pokeball Loader" (https://sketchfab.com/3d-models/pokeball-loader-0066d4c4e8a0487592c785c4688b2e71) by anoopjadhav (https://sketchfab.com/anoopjadhav) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

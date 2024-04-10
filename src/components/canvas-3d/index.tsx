@@ -1,14 +1,21 @@
 import lec3d from '@trickle/lec3d'
 import styles from './index.module.css'
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import CommonModal from '../common-modal'
 import { AnimationMixer, LoopOnce } from 'three'
+import Loading from '../login'
 
-const Canvas3d = () => {
+
+interface Canvas3dProps {
+    close: () => void
+}
+
+const Canvas3d = ({ close }: Canvas3dProps) => {
     const canvas3dWrapperRef = useRef<HTMLDivElement>(null)
     const lecRef = useRef<any>(null)
     const css3dRef = useRef<any>(null)
+    const card3dObjRef = useRef<any>(null)
 
 
     const init = () => {
@@ -23,18 +30,16 @@ const Canvas3d = () => {
                 backgroundColor: 'pink'
             }
         })
+        // lecRef.current.addControls({})
         css3dRef.current = lec3d.initCss3d({
             scene: lecRef.current.scene,
             camera: lecRef.current.camera,
         });
-
-        const controls = lecRef.current.addControls({})
-        controls.enableZoom = true
-
-        lecRef.current.camera.position.set(0, 50, 500)
+        lecRef.current.camera.position.set(0, 70, 600)
         lecRef.current.camera.lookAt(0, 0, 0)
-        // lecRef.current.renderer.setPixelRatio(window.devicePixelRatio);
-        // lecRef.current.camera.updateProjectionMatrix();
+        lecRef.current.camera.far = 2000
+        // lecRef.current.camera.near = 0
+        lecRef.current.camera.updateProjectionMatrix();
     }
 
     const elementMixer = (jsx: JSX.Element) => {
@@ -43,25 +48,35 @@ const Canvas3d = () => {
         let a = 0.02
         div.style.width = '0'
         div.style.height = '0'
+        div.style.transform = 'translateZ(0)'
         ReactDOM.createRoot(div).render(jsx);
         const css3dObj = css3dRef.current.createCss3dObject({ element: div });
         css3dObj.position.set(0, 0, 0)
-        setTimeout(() => {
+        const timerId = setTimeout(() => {
             const expand = () => {
                 size += a
                 a += 0.02
-                div.style.width = `${size}px`
-                div.style.height = `${size * 3 / 2}px`
+                div.style.width = `${Math.floor(size * 2)}px`
+                div.style.height = `${Math.floor(size * 2)}px`
                 css3dObj.rotation.y = size / 35
                 css3dObj.position.x = size
                 css3dObj.position.z = size / 10
                 css3dObj.position.y = size + 50
+                lecRef.current.camera.position.z += size / 30
+                lecRef.current.camera.lookAt(css3dObj.position)
+                lecRef.current.camera.updateProjectionMatrix();
+
                 if (size < 200) {
                     requestAnimationFrame(expand)
                 }
+
             }
             expand()
+
+            clearTimeout(timerId)
         }, 4500)
+
+        card3dObjRef.current = css3dObj
         lecRef.current.scene.add(css3dObj);
     }
 
@@ -101,21 +116,42 @@ const Canvas3d = () => {
         }
     }
 
+    // 登录成功就调用这个函数
+    const changeSize = () => {
+        let size = 0
+        const a = 0.01
+        const update = () => {
+            lecRef.current.camera.position.z -= size / 1.1
+            lecRef.current.camera.position.y += size / 5
+            lecRef.current.camera.position.x += size / 4
+
+            lecRef.current.camera.rotation.y = -size / 7
+            size += a
+            if (lecRef.current.camera.position.z > card3dObjRef.current.position.z + 100) {
+                // lecRef.current.renderer.setPixelRatio(window.devicePixelRatio);
+                // lecRef.current.camera.updateProjectionMatrix();
+                requestAnimationFrame(update)
+            } else {
+                const timerId = setTimeout(() => {
+                    lecRef.current.unload()
+                    close()
+                    clearTimeout(timerId)
+                }, 1000)
+            }
+        }
+        update()
+    }
+
     useEffect(() => {
         init()
-        elementMixer(<CommonModal></CommonModal>)
+        elementMixer(
+            <CommonModal changeSize={changeSize}></CommonModal>
+        )
         start()
         return () => {
             lecRef.current.unload()
         }
     }, [])
-
-
-
-    useLayoutEffect(() => {
-
-    }, [])
-
 
 
     return (

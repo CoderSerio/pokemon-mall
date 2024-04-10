@@ -2,6 +2,16 @@
     overflow: hidden;
     height: 100%;
     width: 100%;
-    background-color: red;
     color: black;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    transform: translateZ(0);
+    font-weight: 800;
+    -webkit-font-smoothing: antialiased;
+}
+
+
+.content {
+    padding: 20px;
 }

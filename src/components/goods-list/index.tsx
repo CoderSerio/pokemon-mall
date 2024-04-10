@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import styles from './index.module.css'
 
 
@@ -10,27 +10,36 @@ const mockData = [
 
 const GoodsList = () => {
     const goodsListWrapperRef = useRef<HTMLDivElement>(null)
+    const [visible, setVisible] = useState<boolean>(false)
+    const [showDetailModal, setShowDetailModal] = useState<boolean>(false)
+
 
     useLayoutEffect(() => {
-        let opacity = 0
-        const update = () => {
-            if (goodsListWrapperRef.current && opacity <= 1) {
-                goodsListWrapperRef.current.style.opacity = opacity.toString()
-                opacity += 0.001
-                requestAnimationFrame(update)
+        setTimeout(() => {
+            if (goodsListWrapperRef.current) {
+                setVisible(true)
             }
-        }
+        }, 1000)
     }, [])
 
+    const showDetail = () => {
+        setShowDetailModal(true)
+    }
+
+
     return (
-        <div ref={goodsListWrapperRef} className={styles['goods-list-wrapper']}>
+        <div ref={goodsListWrapperRef} className={`${styles['goods-list-wrapper']} ${visible ? styles['visible'] : ''}`}>
             {mockData.map((item) => {
                 return (
-                    <div className={styles['card-item-wrapper']}>
+                    <div onClick={showDetail} className={styles['card-item-wrapper']}>
                         商品
                     </div>
                 )
             })}
+            <div className={`${styles['detail-modal']} ${showDetailModal ? styles['visible'] : ''}`}>
+                <div onClick={() => { setShowDetailModal(false) }} className={styles['close-icon']}>x</div>
+                商品详情
+            </div>
         </div>
     )
 }

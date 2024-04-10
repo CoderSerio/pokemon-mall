@@ -21,7 +21,7 @@ const Canvas3d = ({ close }: Canvas3dProps) => {
     const init = () => {
         lecRef.current = lec3d.init({
             axesHelperConfigs: {
-                length: 10000,
+                length: 0,
             },
             lightConfigs: {
                 color: 'white'
@@ -62,7 +62,7 @@ const Canvas3d = ({ close }: Canvas3dProps) => {
                 css3dObj.position.x = size
                 css3dObj.position.z = size / 10
                 css3dObj.position.y = size + 50
-                lecRef.current.camera.position.z += size / 30
+                lecRef.current.camera.position.z += size / 60
                 lecRef.current.camera.lookAt(css3dObj.position)
                 lecRef.current.camera.updateProjectionMatrix();
 

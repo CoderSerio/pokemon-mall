@@ -1,3 +1,4 @@
+import styles from './index.module.css'
 // 懒得做路由了，所以就用弹窗
 // 四个状态——注册、登录、列表、详情
 // 注册、登录是小窗
@@ -6,7 +7,11 @@
 const CommonModal = () => {
 
     return (
-        <div>CommonModal</div>
+        <div className={styles['common-modal-wrapper']}>
+            CommonModal
+            <div>123</div>
+            <input type="text" />
+        </div>
     )
 }
 
